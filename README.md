@@ -1,4 +1,4 @@
-# ZicBoard Version 1.7.5
+# ZicBoard Version 1.8.0
 
 - [V2board Gốc](https://github.com/v2board/v2board)
 - [V2board MOD](https://github.com/wyx2685/v2board)
@@ -23,7 +23,7 @@
 [Demo](https://v2.mua4g.com)
 
 ## Tính năng
-- Đặc Biệt: Thêm WEB con cho CTV.
+- Đặc Biệt: Thêm WEB con cho CTV. Bank Riêng CTV
 - Hỗ trợ Sing-Box.
 - User thay sni nhanh.
     + Thay sni trên trang chủ.
@@ -37,7 +37,7 @@
 
 vào App Store > PHP 7.4 > Install extensions > ionCube
 ```
-git clone https://github.com/kutycma/ZicBoard.git ./
+git clone https://github.com/kutycma/ZicBoard-New.git ./
 ```
 
 
