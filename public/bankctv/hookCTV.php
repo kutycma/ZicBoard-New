@@ -184,6 +184,9 @@ foreach ($transactions as $transaction) {
                     }
                 }
             }
+            else {
+                $staff = 5;
+            }
             $results[] = [
                 'comment' => $commentFromPost,
                 'amount' => $amount,
