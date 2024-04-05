@@ -80,7 +80,9 @@ foreach ($transactions as $transaction) {
             $price = $tien/100;
                     
 
-                    if (($status == "0" || $status == "2") && $amount >= $price) {
+            if ($status == "5") {
+                $staff = 2;
+            } elseif (($status == "0" || $status == "2") && $amount >= $price) {
                         
                         $order = DB::table('v2_order')->where('trade_no', $trade_no)->first();
                         if ($order) {
