@@ -10,7 +10,10 @@
         exit;
     }
 	$userId = $user->id;
-	$paymentInfo = DB::table('v2_payment')->whereRaw("FIND_IN_SET(?,id_staff)", [$userId])->first();
+	$paymentInfo = DB::table('v2_payment')
+    ->whereRaw("FIND_IN_SET(?,id_staff)", [$userId])
+    ->whereNotNull('token')
+    ->first();
 	$keywork = $paymentInfo->keyword;
 	$bankid = $paymentInfo->bank_id;
 	$accName = $paymentInfo->acc_name;
@@ -65,29 +68,10 @@
 	$order_id = $order->order_id;
 	$gate = $order->gate;
 	
-	
-	//print_r($order);
-	
-	@mkdir('ttt/'.$keywork.''.$order_id);
-	
-	if(!file_exists('ttt/'.$keywork.''.$order_id.'/status.log')){
-		file_put_contents('ttt/'.$keywork.''.$order_id.'/status.log',0);
-	}
-	if(!file_exists('ttt/'.$keywork.''.$order_id.'/trade_no.log')){
-		file_put_contents('ttt/'.$keywork.''.$order_id.'/trade_no.log',$trade_no);
-	}
-	
-	if(!file_exists('ttt/'.$keywork.''.$order_id.'/price.log')){
-		file_put_contents('ttt/'.$keywork.''.$order_id.'/price.log',$amount);
-	}
-	
-	if(!file_exists('ttt/'.$keywork.''.$order_id.'/time.log')){
-		file_put_contents('ttt/'.$keywork.''.$order_id.'/time.log',time());
-	}
-	
-	$time = file_get_contents('ttt/'.$keywork.''.$order_id.'/time.log');
-	$status = file_get_contents('ttt/'.$keywork.''.$order_id.'/status.log');
-	if($status == "1"){
+	$orders = DB::table('v2_order')->where('trade_no', $trade_no)->first();
+	$time = $orders->created_at;
+	$status = $orders->status;
+	if($status == "1" || $status == "3"){
 		header("Location: ".$return_url);
 		exit;
 	}

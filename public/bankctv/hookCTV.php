@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 include('config.php');
 
-$tradeno = $_POST['tradeno'];
+$trade_no = $_POST['tradeno'];
 $token = $_POST['token']; 
-$orderTK = DB::table('v2_order')->where('trade_no', $tradeno)->first();
+$orderTK = DB::table('v2_order')->where('trade_no', $trade_no)->first();
+$id_order = $orderTK->id;
 $id_staffTK = $orderTK->invite_user_id;
 $paymentInfo = DB::table('v2_payment')->where('id_staff', $id_staffTK)->first();
 if ($paymentInfo->token != $token) {
@@ -39,7 +40,7 @@ $DataInput = json_decode($response);
 $transactions = [];
 $keyword = strtolower("bank");
 $results = [];
-$commentFromPost = strtolower($_POST['noidung']);
+$commentFromPost = strtolower($_POST['noidung']); //key +  id
 
 if ($bankId == "970436") {
     if (isset($DataInput->transactions) && is_array($DataInput->transactions)) {
@@ -71,21 +72,15 @@ foreach ($transactions as $transaction) {
         if (strpos($description, $commentFromPost) !== false) {
             
             
-            $directory = 'ttt/' . $commentFromPost;
+            
             $staff = 0;
 
-            if (is_dir($directory)) {
-                $statusFile = $directory . '/status.log';
-                $priceFile = $directory . '/price.log';
-                $tradeNoFile = $directory . '/trade_no.log';
-
-                if (file_exists($statusFile) && file_exists($priceFile) && file_exists($tradeNoFile)) {
-                    $status = file_get_contents($statusFile);
-                    $price = (int)file_get_contents($priceFile);
-                    $trade_no = file_get_contents($tradeNoFile);
+            $status = $orderTK->status;
+            $tien = $orderTK->total_amount;
+            $price = $tien/100;
                     
 
-                    if ($status == "0" && $amount >= $price) {
+                    if (($status == "0" || $status == "2") && $amount >= $price) {
                         
                         $order = DB::table('v2_order')->where('trade_no', $trade_no)->first();
                         if ($order) {
@@ -182,11 +177,8 @@ foreach ($transactions as $transaction) {
                             }
                         }
                     }
-                }
-            }
-            else {
-                $staff = 5;
-            }
+               
+            
             $results[] = [
                 'comment' => $commentFromPost,
                 'amount' => $amount,
