@@ -112,7 +112,7 @@ foreach ($transactions as $transaction) {
                                         DB::table('v2_user')->where('id', $user->id)->decrement('commission_balance', $required_balance);
                 
                                         
-                                        file_put_contents($statusFile, '1');
+                                        
                 
                                         
                                         DB::commit();
